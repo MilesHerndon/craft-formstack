@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Formstack plugin for Craft CMS
+ *
+ * FormstackForm Field Settings
+ *
+ * @author    MilesHerndon
+ * @copyright Copyright (c) 2018 MilesHerndon
+ * @link      https://milesherndon.com
+ * @package   Formstack
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("milesherndon\\formstack\\assetbundles\\formstack\\FormstackAsset") %}
+
+{{ forms.textField({
+    label: 'Some Attribute',
+    instructions: 'Enter some attribute here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: field['someAttribute']})
+}}

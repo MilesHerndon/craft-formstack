@@ -1,0 +1,46 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Formstack plugin for Craft CMS 3.x
+ *
+ * Formstack index.twig
+ *
+ * @author    MilesHerndon
+ * @copyright Copyright (c) 2018 MilesHerndon
+ * @link      https://milesherndon.com
+ * @package   Formstack
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("milesherndon\\formstack\\assetbundles\\formstack\\FormstackAsset") %}
+{% do view.registerAssetBundle("milesherndon\\formstack\\assetbundles\\formstackcpsection\\FormstackCPSectionAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "???" %}
+
+{# The title of this CP section #}
+{% set title = "Formstack" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('formstack') %}
+
+{# Get a URL to an image in our AssetBundle #}
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@milesherndon/formstack/assetbundles/formstackcpsection/dist', true) ~ '/img/Formstack-icon.svg' %}
+
+{# Content that should appear in the page header#}
+{% set extraPageHeaderHtml %}
+    <div class="buttons">
+        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('formstack') }}</a>
+    </div>
+{% endset %}
+
+{# The content of the CP Section#}
+{% set content %}
+    <h2>{{ "Formstack CP Section body goes here"|t('formstack') }}</h2>
+    <img src="{{ iconUrl }}" height="64" width="64" />
+    <p class="textline"></p>
+{% endset %}

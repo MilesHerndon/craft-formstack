@@ -1,0 +1,43 @@
+{
+    "name": "milesherndon/formstack",
+    "description": "Plugin to integrate Formstack forms. ",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "formstack"
+    ],
+    "support": {
+        "docs": "???",
+        "issues": "???"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MilesHerndon",
+            "homepage": "https://milesherndon.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "milesherndon\\formstack\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Formstack",
+        "handle": "formstack",
+        "hasCpSettings": false,
+        "hasCpSection": true,
+        "changelogUrl": "???",
+        "components": {
+            "formstack": "milesherndon\\formstack\\services\\Formstack"
+        },
+        "class": "milesherndon\\formstack\\Formstack"
+    }
+}
