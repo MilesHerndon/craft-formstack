@@ -1,8 +1,8 @@
 # Formstack plugin for Craft CMS 3.x
 
-Plugin to integrate Formstack forms. 
+Plugin to integrate Formstack forms.
 
-![Screenshot](resources/img/plugin-logo.png)
+![Screenshot](resources/img/formstack-logo.svg)
 
 ## Requirements
 

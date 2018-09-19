@@ -1,6 +1,6 @@
 {
     "name": "milesherndon/formstack",
-    "description": "Plugin to integrate Formstack forms. ",
+    "description": "Plugin to integrate Formstack forms.",
     "type": "craft-plugin",
     "version": "1.0.0",
     "keywords": [
@@ -11,8 +11,8 @@
         "formstack"
     ],
     "support": {
-        "docs": "???",
-        "issues": "???"
+        "docs": "https://github.com/MilesHerndon/formstack/",
+        "issues": "https://github.com/MilesHerndon/formstack/"
     },
     "license": "MIT",
     "authors": [
@@ -34,7 +34,7 @@
         "handle": "formstack",
         "hasCpSettings": false,
         "hasCpSection": true,
-        "changelogUrl": "???",
+        "changelogUrl": "https://github.com/MilesHerndon/formstack/releases",
         "components": {
             "formstack": "milesherndon\\formstack\\services\\Formstack"
         },
