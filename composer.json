@@ -32,8 +32,8 @@
     "extra": {
         "name": "Formstack",
         "handle": "formstack",
-        "hasCpSettings": false,
-        "hasCpSection": true,
+        "hasCpSettings": true,
+        "hasCpSection": false,
         "changelogUrl": "https://github.com/MilesHerndon/formstack/releases",
         "components": {
             "formstack": "milesherndon\\formstack\\services\\Formstack"

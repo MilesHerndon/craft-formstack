@@ -2,7 +2,7 @@
 /**
  * Formstack plugin for Craft CMS 3.x
  *
- * Plugin to integrate Formstack forms. 
+ * Plugin to integrate Formstack forms.
  *
  * @link      https://milesherndon.com
  * @copyright Copyright (c) 2018 MilesHerndon
@@ -10,9 +10,10 @@
 
 namespace milesherndon\formstack;
 
-use milesherndon\formstack\services\Formstack as FormstackService;
+use milesherndon\formstack\services\FormstackService;
 use milesherndon\formstack\variables\FormstackVariable;
 use milesherndon\formstack\fields\FormstackForm as FormstackFormField;
+use milesherndon\formstack\models\Settings;
 
 use Craft;
 use craft\base\Plugin;
@@ -65,6 +66,8 @@ class Formstack extends Plugin
      */
     public $schemaVersion = '1.0.0';
 
+    public static $formstackUrl = 'https://www.formstack.com/api/v2/form.json?oauth_token=';
+
     // Public Methods
     // =========================================================================
 
@@ -84,34 +87,6 @@ class Formstack extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        // Register our site routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['siteActionTrigger1'] = 'formstack/form-submit';
-            }
-        );
-
-        // Register our CP routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['cpActionTrigger1'] = 'formstack/form-submit/do-something';
-            }
-        );
-
-        // Register our fields
-        Event::on(
-            Fields::class,
-            Fields::EVENT_REGISTER_FIELD_TYPES,
-            function (RegisterComponentTypesEvent $event) {
-                $event->types[] = FormstackFormField::class;
-            }
-        );
-
-        // Register our variables
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
@@ -122,16 +97,19 @@ class Formstack extends Plugin
             }
         );
 
-        // Do something after we're installed
+        // Register our fields
         Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                    // We were just installed
-                }
+            Fields::className(),
+            Fields::EVENT_REGISTER_FIELD_TYPES,
+            function (RegisterComponentTypesEvent $event) {
+                $event->types[] = FormstackFormField::class;
             }
         );
+
+        $this->setComponents([
+            'FormstackService' => \milesherndon\formstack\services\FormstackService::class,
+        ]);
+
 
 /**
  * Logging in Craft involves using one of the following methods:
@@ -164,4 +142,34 @@ class Formstack extends Plugin
     // Protected Methods
     // =========================================================================
 
+    /**
+     * @inheritdoc
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function settingsHtml(): string
+    {
+
+        // Render our settings template
+        return Craft::$app->view->renderTemplate(
+            'formstack/settings',
+            [
+                'settings'    => $this->getSettings()
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getFormstackUrl()
+    {
+        return self::$formstackUrl;
+    }
 }

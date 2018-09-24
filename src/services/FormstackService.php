@@ -2,7 +2,7 @@
 /**
  * Formstack plugin for Craft CMS 3.x
  *
- * Plugin to integrate Formstack forms. 
+ * Plugin to integrate Formstack forms.
  *
  * @link      https://milesherndon.com
  * @copyright Copyright (c) 2018 MilesHerndon
@@ -28,7 +28,7 @@ use craft\base\Component;
  * @package   Formstack
  * @since     1.0.0
  */
-class Formstack extends Component
+class FormstackService extends Component
 {
     // Public Methods
     // =========================================================================
@@ -39,14 +39,28 @@ class Formstack extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Formstack::$plugin->formstack->exampleService()
+     *     Formstack::$plugin->formstack->getFormstackData()
      *
      * @return mixed
      */
-    public function exampleService()
+    public function getFormstackData()
     {
-        $result = 'something';
+        $settings = Formstack::getInstance()->getSettings();
+        $formOptions = [];
+        $formstackWithToken = Formstack::getFormstackUrl() . $settings->formstackOAuth;
 
-        return $result;
+        $formstackForms = @file_get_contents($formstackWithToken);
+        if (!empty($formstackForms)) {
+            $objects = json_decode($formstackForms);
+
+            foreach($objects->forms as $form){
+                $formOptions[] = array(
+                  'label' => $form->name,
+                  'value' => $form->id
+                );
+            }
+        }
+
+        return $formOptions;
     }
 }

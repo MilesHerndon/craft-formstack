@@ -2,7 +2,7 @@
 /**
  * Formstack plugin for Craft CMS 3.x
  *
- * Plugin to integrate Formstack forms. 
+ * Plugin to integrate Formstack forms.
  *
  * @link      https://milesherndon.com
  * @copyright Copyright (c) 2018 MilesHerndon
@@ -11,7 +11,7 @@
 namespace milesherndon\formstack\fields;
 
 use milesherndon\formstack\Formstack;
-use milesherndon\formstack\assetbundles\formstackformfield\FormstackFormFieldAsset;
+use milesherndon\formstack\assetbundles\formstackformfield\FormstackFormFieldAsset as FormstackAssets;
 
 use Craft;
 use craft\base\ElementInterface;
@@ -19,6 +19,7 @@ use craft\base\Field;
 use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
+use craft\fields\SelectField;
 
 /**
  * FormstackForm Field
@@ -43,7 +44,7 @@ class FormstackForm extends Field
      *
      * @var string
      */
-    public $someAttribute = 'Some Default';
+    public $assetSources = [];
 
     // Static Methods
     // =========================================================================
@@ -55,7 +56,7 @@ class FormstackForm extends Field
      */
     public static function displayName(): string
     {
-        return Craft::t('formstack', 'FormstackForm');
+        return Craft::t('formstack', 'Formstack Form');
     }
 
     // Public Methods
@@ -74,10 +75,7 @@ class FormstackForm extends Field
     public function rules()
     {
         $rules = parent::rules();
-        $rules = array_merge($rules, [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
-        ]);
+        $rules = array_merge($rules, []);
         return $rules;
     }
 
@@ -227,11 +225,14 @@ class FormstackForm extends Field
      */
     public function getSettingsHtml()
     {
+        $formOptions = Formstack::getInstance()->FormstackService->getFormstackData();
+
         // Render the settings template
         return Craft::$app->getView()->renderTemplate(
             'formstack/_components/fields/FormstackForm_settings',
             [
                 'field' => $this,
+                'formOptions' => $formOptions
             ]
         );
     }
@@ -336,7 +337,7 @@ class FormstackForm extends Field
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         // Register our asset bundle
-        Craft::$app->getView()->registerAssetBundle(FormstackFormFieldAsset::class);
+        Craft::$app->getView()->registerAssetBundle(FormstackAssets::class);
 
         // Get our id and namespace
         $id = Craft::$app->getView()->formatInputId($this->handle);
@@ -352,6 +353,8 @@ class FormstackForm extends Field
         $jsonVars = Json::encode($jsonVars);
         Craft::$app->getView()->registerJs("$('#{$namespacedId}-field').FormstackFormstackForm(" . $jsonVars . ");");
 
+        $formOptions = Formstack::getInstance()->FormstackService->getFormstackData();
+
         // Render the input template
         return Craft::$app->getView()->renderTemplate(
             'formstack/_components/fields/FormstackForm_input',
@@ -361,6 +364,7 @@ class FormstackForm extends Field
                 'field' => $this,
                 'id' => $id,
                 'namespacedId' => $namespacedId,
+                'formOptions' => $formOptions
             ]
         );
     }

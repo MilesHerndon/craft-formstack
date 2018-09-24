@@ -13,14 +13,10 @@
  */
 #}
 
-{% import "_includes/forms" as forms %}
+{# % import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("milesherndon\\formstack\\assetbundles\\formstack\\FormstackAsset") %}
-
-{{ forms.textField({
-    label: 'Some Attribute',
-    instructions: 'Enter some attribute here.',
-    id: 'someAttribute',
-    name: 'someAttribute',
-    value: field['someAttribute']})
-}}
+{{ forms.selectField({
+  'label': 'Formstack Default Form',
+  'instructions': 'Select a form.',
+  'options': formOptions
+}) } #}

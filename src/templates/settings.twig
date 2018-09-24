@@ -1,0 +1,27 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Formstack plugin for Craft CMS 3.x
+ *
+ * Formstack index.twig
+ *
+ * @author    MilesHerndon
+ * @copyright Copyright (c) 2018 MilesHerndon
+ * @link      https://milesherndon.com
+ * @package   Formstack
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+<p class="textline">You'll need to use your application's OAuth2 token, which you can generate in your Settings Dropdown -> API.</p>
+
+{{ forms.textField({
+    'label': 'OAuth Token',
+    'instructions': 'Enter your Formstack OAuth Token.',
+    'id': 'formstackOAuth',
+    'name': 'formstackOAuth',
+    'required': true,
+    'value': settings['formstackOAuth']
+}) }}
