@@ -2,7 +2,7 @@
 /**
  * Formstack plugin for Craft CMS 3.x
  *
- * Plugin to integrate Formstack forms. 
+ * Plugin to integrate Formstack forms.
  *
  * @link      https://milesherndon.com
  * @copyright Copyright (c) 2018 MilesHerndon
@@ -52,5 +52,15 @@ class FormstackVariable
             $result = "I'm feeling optional today...";
         }
         return $result;
+    }
+
+    public function getForms()
+    {
+        return Formstack::getInstance()->FormstackService->getForms();
+    }
+
+    public function getFormById($id, $additionalData = [])
+    {
+        return Formstack::getInstance()->FormstackService->getFormById($id, $additionalData);
     }
 }

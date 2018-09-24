@@ -63,4 +63,57 @@ class FormstackService extends Component
 
         return $formOptions;
     }
+
+    /**
+    * Get forms from Formstack
+    *
+    * @return array Array of Formstack Forms
+    */
+    public function getForms()
+    {
+        $settings = Formstack::getInstance()->getSettings();
+        $formstackWithToken = Formstack::getFormstackUrl() . $settings->formstackOAuth;
+
+        try {
+            $results = @file_get_contents($formstackWithToken);
+            if ($results === false) {
+                return "Your forms are not working at the moment.";
+            } else {
+                $object = json_decode($results);
+                return $object->forms;
+            }
+        } catch(\Exception $e) {
+            return $e;
+        }
+
+    }
+
+    /**
+    * Get specific form from Formstack
+    *
+    * @param $id: Formstack form id
+    * @return array Formstack Form
+    */
+    public function getFormById($id, $additionalData = [])
+    {
+        $settings = Formstack::getInstance()->getSettings();
+        $formstackWithToken = 'https://www.formstack.com/api/v2/form/'.$id.'.json?oauth_token=' . $settings->formstackOAuth;
+
+        try{
+            $result = file_get_contents($formstackWithToken);
+            $resultObject = json_decode($result);
+
+            $form['fields'] = $resultObject->fields;
+
+            if (!empty($additionalData)) {
+                foreach ($additionalData as $item) {
+                    $form[$item] = $resultObject->$item;
+                }
+            }
+
+            return $form;
+        } catch(\Exception $e) {
+            return $e;
+        }
+    }
 }
