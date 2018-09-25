@@ -2,7 +2,7 @@
 /**
  * Formstack plugin for Craft CMS 3.x
  *
- * Plugin to integrate Formstack forms. 
+ * Plugin to integrate Formstack forms.
  *
  * @link      https://milesherndon.com
  * @copyright Copyright (c) 2018 MilesHerndon
@@ -14,6 +14,7 @@ use milesherndon\formstack\Formstack;
 
 use Craft;
 use craft\web\Controller;
+use craft\web\Request;
 
 /**
  * FormSubmit Controller
@@ -46,7 +47,7 @@ class FormSubmitController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['index', 'do-something'];
+    protected $allowAnonymous = ['index'];
 
     // Public Methods
     // =========================================================================
@@ -59,21 +60,64 @@ class FormSubmitController extends Controller
      */
     public function actionIndex()
     {
-        $result = 'Welcome to the FormSubmitController actionIndex() method';
+        try {
+            $this->requirePostRequest();
 
-        return $result;
-    }
+            // Get Referrer Page
+            $url = Craft::$app->getRequest()->resolve()[1]['p'];
+            $url = stripslashes($url);
 
-    /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/formstack/form-submit/do-something
-     *
-     * @return mixed
-     */
-    public function actionDoSomething()
-    {
-        $result = 'Welcome to the FormSubmitController actionDoSomething() method';
+            $formData = Craft::$app->getRequest()->post();
 
-        return $result;
+            // Get Settings
+            $settings = Formstack::getInstance()->getSettings();
+
+            // Parse field data
+            foreach ( $formData as $key => $value) {
+                if ($key !== 'action' && $key !== 'redirect' && $key !== '_submit' && $key !== 'CRAFT_CSRF_TOKEN' ) {
+                    if (strpos($key, '-') != 0) {
+                        $fieldName = substr($key, 0, strpos($key, '-'));
+                        $fieldSubname = substr($key, strpos($key, '-')+1);
+                        $fields[] = $fieldName . '[' . $fieldSubname . ']=' . $value;
+                    } else {
+                        $fields[] = $key . '=' . $value;
+                    }
+                }
+            }
+            $postFields = implode ('&', $fields);
+
+            // Create request URL
+            $submissionUrl = 'https://www.formstack.com/api/v2/form/' . $formData['form'] . '/submission.json?oauth_token=' . $settings->formstackOAuth;
+
+            $curl = curl_init($submissionUrl);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLINFO_HEADER_OUT, true);
+
+            $result = curl_exec($curl);
+            $resultJson = json_decode($result)
+
+            curl_close($curl);
+
+            $message = '';
+            if (isset($resultJson->message)) {
+                $message = $resultJson->message;
+                $message = str_replace(array('<p>','</p>'), '', $message);
+            }
+
+            // Check if ajax request
+            if (!Formstack::$plugin->request->getIsAjax()) {
+                $url = $url . '?message=' . urlencode($message) . '&submitted=true#newsletter-wrapper';
+                $this->redirect($url);
+            }
+
+            return $resultJson;
+
+        } catch (\Exception $e ) {
+            return $e;
+        }
     }
 }

@@ -39,9 +39,9 @@ class FormstackService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Formstack::$plugin->formstack->getFormstackData()
+     *     Formstack::getInstance()->FormstackService->getFormstackData()
      *
-     * @return mixed
+     * @return array
      */
     public function getFormstackData()
     {
@@ -92,6 +92,7 @@ class FormstackService extends Component
     * Get specific form from Formstack
     *
     * @param $id: Formstack form id
+    * @param $additionalData: array of fields
     * @return array Formstack Form
     */
     public function getFormById($id, $additionalData = [])

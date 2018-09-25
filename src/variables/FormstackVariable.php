@@ -42,23 +42,25 @@ class FormstackVariable
      *
      *     {{ craft.formstack.exampleVariable(twigValue) }}
      *
-     * @param null $optional
-     * @return string
      */
-    public function exampleVariable($optional = null)
-    {
-        $result = "And away we go to the Twig template...";
-        if ($optional) {
-            $result = "I'm feeling optional today...";
-        }
-        return $result;
-    }
 
+    /**
+     * Function to get all forms
+     *
+     * @return array
+     */
     public function getForms()
     {
         return Formstack::getInstance()->FormstackService->getForms();
     }
 
+    /**
+     * Function to get all forms
+     *
+     * @param $id: Formstack form id
+     * @param $additionalData: array of fields
+     * @return array
+     */
     public function getFormById($id, $additionalData = [])
     {
         return Formstack::getInstance()->FormstackService->getFormById($id, $additionalData);

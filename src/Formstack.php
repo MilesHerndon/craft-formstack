@@ -87,6 +87,34 @@ class Formstack extends Plugin
         parent::init();
         self::$plugin = $this;
 
+        // Register our site routes
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules['siteActionTrigger1'] = 'actions/formstack/form-submit';
+            }
+        );
+
+        // Register our CP routes
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_CP_URL_RULES,
+            function (RegisterUrlRulesEvent $event) {
+                $event->rules['cpActionTrigger1'] = 'formstack/form-submit/save';
+            }
+        );
+
+        // Register our fields
+        Event::on(
+            Fields::class,
+            Fields::EVENT_REGISTER_FIELD_TYPES,
+            function (RegisterComponentTypesEvent $event) {
+                $event->types[] = FormstackFormField::class;
+            }
+        );
+
+        // Register our variables
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
@@ -94,15 +122,6 @@ class Formstack extends Plugin
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('formstack', FormstackVariable::class);
-            }
-        );
-
-        // Register our fields
-        Event::on(
-            Fields::className(),
-            Fields::EVENT_REGISTER_FIELD_TYPES,
-            function (RegisterComponentTypesEvent $event) {
-                $event->types[] = FormstackFormField::class;
             }
         );
 
