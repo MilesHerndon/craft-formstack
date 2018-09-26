@@ -2,7 +2,7 @@
 
 Plugin to integrate Formstack forms.
 
-![Screenshot](resources/img/formstack-logo.svg)
+![Formstack Logo](resources/img/formstack-logo.svg)
 
 ## Requirements
 
@@ -18,7 +18,7 @@ To install the plugin, follow these instructions.
 
 2. Then tell Composer to load the plugin:
 
-        composer require /formstack
+        composer require milesherndon/formstack
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Formstack.
 
