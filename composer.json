@@ -1,8 +1,8 @@
 {
     "name": "milesherndon/formstack",
-    "description": "Plugin to integrate Formstack forms.",
+    "description": "Plugin to integrate Formstack forms into Craft CMS 3.",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0-RC1"
+        "craftcms/cms": "^3.0.0"
     },
     "autoload": {
         "psr-4": {
