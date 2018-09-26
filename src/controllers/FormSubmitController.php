@@ -63,10 +63,6 @@ class FormSubmitController extends Controller
         try {
             $this->requirePostRequest();
 
-            // Get Referrer Page
-            $url = Craft::$app->getRequest()->resolve()[1]['p'];
-            $url = stripslashes($url);
-
             $formData = Craft::$app->getRequest()->post();
 
             // Get Settings
@@ -98,19 +94,14 @@ class FormSubmitController extends Controller
             curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
             $result = curl_exec($curl);
-            $resultJson = json_decode($result)
+            $resultJson = json_decode($result);
 
             curl_close($curl);
 
-            $message = '';
-            if (isset($resultJson->message)) {
-                $message = $resultJson->message;
-                $message = str_replace(array('<p>','</p>'), '', $message);
-            }
-
-            // Check if ajax request
+            // Check if not ajax request
             if (!Formstack::$plugin->request->getIsAjax()) {
-                $url = $url . '?message=' . urlencode($message) . '&submitted=true#newsletter-wrapper';
+                $message = isset($postFields['success']) ? $postFields['success'] : '';
+                $url = $formData['redirect'] . '?message=' . urlencode($message) . '&submitted=true';
                 $this->redirect($url);
             }
 
