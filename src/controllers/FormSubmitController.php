@@ -94,7 +94,6 @@ class FormSubmitController extends Controller
             curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
             $result = curl_exec($curl);
-            $resultJson = json_decode($result);
 
             curl_close($curl);
 
@@ -105,7 +104,7 @@ class FormSubmitController extends Controller
                 $this->redirect($url);
             }
 
-            return $resultJson;
+            return $result;
 
         } catch (\Exception $e ) {
             return $e;
