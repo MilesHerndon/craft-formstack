@@ -94,15 +94,19 @@ class FormSubmitController extends Controller
             curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
             $result = curl_exec($curl);
+            $result = json_decode($result);
 
             curl_close($curl);
 
+            $result->message = isset($formData['success']) ? $formData['success'] : '';
+
             // Check if not ajax request
             if (!Formstack::$plugin->request->getIsAjax()) {
-                $message = isset($postFields['success']) ? $postFields['success'] : '';
-                $url = $formData['redirect'] . '?message=' . urlencode($message) . '&submitted=true';
+                $url = $formData['redirect'] . '?message=' . urlencode($result->message) . '&submitted=true';
                 $this->redirect($url);
             }
+
+            $result = json_encode($result);
 
             return $result;
 
