@@ -2,7 +2,7 @@
 
 Plugin to integrate Formstack forms.
 
-![Formstack Logo](resources/img/formstack-logo.svg =300x53)
+<img src="./resources/img/formstack-logo.svg" width="300" height="53" alt="Formstack Logo">
 
 ## Requirements
 
@@ -72,7 +72,7 @@ This will pass the viewkey and the name in the response as well. To see what els
 
             <div class="fsPage" id="fsPage{{entry.contactForm}}-1">
                 {% for field in formstack.fields %}
-                    <div class="form__input-wrapper{% if field.type != "name" %} fsCell fsFieldCell{% endif %}" {% if field.type != "name" %}id="fsCell{{field.id}}"{% endif %} >
+                    <div class="form__input-wrapper fsCell fsFieldCell" id="fsCell{{field.id}}">
                         {% if field.type == "name" or field.type == "text" or field.type == "email" or field.type == "phone" %}
                             {% if field.placeholder is defined and field.placeholder is not empty %}
                                 {% set placeholder = field.placeholder %}
@@ -83,7 +83,7 @@ This will pass the viewkey and the name in the response as well. To see what els
                             <label for="field{{field.id}}">{{field.label}} {% if field.required %} <span>*</span>{% endif %}</label>
                         {% endif %}
                         {% if field.type == "textarea" %}
-                            <textarea id="field{{field.id}}" name="field_{{field.id}}" class="fsField{% if field.required %} fsRequired required{% endif %}" {% if field.required %}aria-required="true" required="required"{% endif %} placeholder="Hello there..."></textarea>
+                            <textarea id="field{{field.id}}" name="field_{{field.id}}" class="fsField{% if field.required %} fsRequired required{% endif %}" {% if field.required %}aria-required="true" required="required"{% endif %} placeholder=""></textarea>
                             <label for="field{{field.id}}">{{field.label}} {% if field.required %} <span>*</span>{% endif %}</label>
                         {% endif %}
                         {% if field.type == "select" %}
