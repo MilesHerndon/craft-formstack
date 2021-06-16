@@ -1,3 +1,5 @@
+⛔️ DEPRECATED ⛔️
+
 # Formstack plugin for Craft CMS 3.x
 
 Plugin to integrate Formstack forms.
